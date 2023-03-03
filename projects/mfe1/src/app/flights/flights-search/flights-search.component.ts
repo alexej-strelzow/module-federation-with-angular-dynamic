@@ -8,11 +8,11 @@ import {Component, ViewChild, ViewContainerRef, Inject, Injector, ComponentFacto
 export class FlightsSearchComponent {
 
   @ViewChild('vc', { read: ViewContainerRef, static: true })
-  viewContainer: ViewContainerRef;
+  viewContainer: ViewContainerRef | undefined;
 
   constructor(
-    @Inject(Injector) private injector,
-    @Inject(ComponentFactoryResolver) private cfr) { }
+    @Inject(Injector) private injector: Injector,
+    @Inject(ComponentFactoryResolver) private cfr: ComponentFactoryResolver) { }
 
   search() {
     alert('Not implemented for this demo!');
@@ -22,7 +22,9 @@ export class FlightsSearchComponent {
     const comp = await import('../lazy/lazy.component').then(m => m.LazyComponent);
 
     const factory = this.cfr.resolveComponentFactory(comp);
-    this.viewContainer.createComponent(factory, null, this.injector);
+    if (this.viewContainer) {
+      this.viewContainer.createComponent(factory, undefined, this.injector);
+    }
   }
 
 
